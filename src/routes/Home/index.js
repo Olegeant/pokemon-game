@@ -1,7 +1,7 @@
-import MenuHeader from '../../components/MenuHeader/MenuHeader';
+import { useHistory } from 'react-router';
+
 import Header from '../../components/Header/Header';
 import Layout from '../../components/Layout/Layout';
-import Footer from '../../components/Footer/Footer';
 import PokemonCard from '../../components/PokemonCard/PokemonCard';
 
 import PokemonBg from '../../images/bg1.jpg';
@@ -10,12 +10,20 @@ import POKEMONS from '../../data/pokemon.json';
 
 import styles from './style.module.css';
 
-function HomePage({ onChangePage }) {
+function HomePage() {
+  const history = useHistory();
+
+  const handleHeaderBtnClick = () => {
+    history.push('/game');
+  };
+
   return (
     <>
-      <MenuHeader />
-
-      <Header title="This is title" descr="This is Description!" onChangePage={onChangePage} />
+      <Header
+        title="This is title"
+        descr="This is Description!"
+        onHeaderBtnClick={handleHeaderBtnClick}
+      />
 
       <Layout title="Layout 1" descr="Layout1 description" urlBg={PokemonBg}>
         <p>
@@ -59,8 +67,6 @@ function HomePage({ onChangePage }) {
           expedita facere aspernatur ut suscipit corrupti eos distinctio.
         </p>
       </Layout>
-
-      <Footer />
     </>
   );
 }

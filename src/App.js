@@ -1,24 +1,51 @@
-import { useState } from 'react';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import cn from 'classnames';
+
 import HomePage from './routes/Home';
 import GamePage from './routes/Game';
+import AboutPage from './routes/About';
+import ContactPage from './routes/Contact';
+import NotFound from './routes/NotFound';
+
+import MenuHeader from './components/MenuHeader/MenuHeader';
+import Footer from './components/Footer/Footer';
+
+import styles from './styles.module.css';
 
 const App = () => {
-  const [page, setPage] = useState('app');
+  const match = useRouteMatch('/');
 
-  const handleChangePage = page => {
-    setPage(page);
-  };
+  return (
+    <>
+      <MenuHeader bgActive={!match.isExact} />
 
-  switch (page) {
-    case 'app':
-      return <HomePage onChangePage={handleChangePage} />;
+      <div className={cn(styles.wrap, { [styles.isHomePage]: match.isExact })}>
+        <Switch>
+          <Route path="/" exact>
+            <HomePage />
+          </Route>
 
-    case 'game':
-      return <GamePage onChangePage={handleChangePage} />;
+          <Route path="/game">
+            <GamePage />
+          </Route>
 
-    default:
-      return <HomePage />;
-  }
+          <Route path="/about">
+            <AboutPage />
+          </Route>
+
+          <Route path="/contact">
+            <ContactPage />
+          </Route>
+
+          <Route>
+            <NotFound />
+          </Route>
+        </Switch>
+      </div>
+
+      <Footer />
+    </>
+  );
 };
 
 export default App;
