@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import cn from 'classnames';
 import cardBackedPicture from '../../images/card-back-side.jpg';
 import styles from './PokemonCard.module.css';
