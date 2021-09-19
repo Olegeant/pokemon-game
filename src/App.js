@@ -10,6 +10,8 @@ import NotFound from './routes/NotFound';
 import MenuHeader from './components/MenuHeader/MenuHeader';
 import Footer from './components/Footer/Footer';
 
+import database from './service/firebase';
+
 import styles from './styles.module.css';
 
 const App = () => {

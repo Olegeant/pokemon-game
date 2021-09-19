@@ -2,16 +2,25 @@ import { useState } from 'react';
 
 import PokemonCard from '../../components/PokemonCard/PokemonCard';
 
-import POKEMONS from '../../data/pokemon.json';
+import POKEMONS from '../../data/pokemons-default-db.json';
 
 const GamePage = () => {
   const [pokemons, setPokemons] = useState(() =>
-    POKEMONS.map(item => ({ ...item, isActive: false })),
+    Object.entries(POKEMONS).reduce(
+      (acc, [key, value]) => ({ ...acc, [key]: { ...value, isActive: false } }),
+      {},
+    ),
   );
 
   const handleCardClick = id => {
     setPokemons(prevState =>
-      prevState.map(item => (item.id === id ? { ...item, isActive: !item.isActive } : item)),
+      Object.entries(prevState).reduce(
+        (acc, [key, value]) => ({
+          ...acc,
+          [key]: { ...value, isActive: key === id ? true : value.isActive },
+        }),
+        {},
+      ),
     );
   };
 
@@ -19,11 +28,11 @@ const GamePage = () => {
     <>
       <h1>This is GamePage !!!</h1>;
       <div className="flex">
-        {pokemons.map(({ name, id, type, values, img, isActive }) => (
+        {Object.entries(pokemons).map(([key, { name, type, values, img, isActive }]) => (
           <PokemonCard
-            key={id}
+            key={key}
             name={name}
-            id={id}
+            id={key}
             type={type}
             values={values}
             img={img}
