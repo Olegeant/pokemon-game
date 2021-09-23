@@ -1,38 +1,47 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import PokemonCard from '../../components/PokemonCard/PokemonCard';
+import StartPage from './routes/Start';
+import BoardPage from './routes/Board';
+import FinishPage from './routes/Finish';
 
-import POKEMONS from '../../data/pokemon.json';
+import { PokemonContext } from '../../context/PokemonContext';
 
 const GamePage = () => {
-  const [pokemons, setPokemons] = useState(() =>
-    POKEMONS.map(item => ({ ...item, isActive: false })),
-  );
+  const [selectedPokemons, setSelectedPokemons] = useState({});
+  const match = useRouteMatch();
 
-  const handleCardClick = id => {
-    setPokemons(prevState =>
-      prevState.map(item => (item.id === id ? { ...item, isActive: !item.isActive } : item)),
-    );
+  const handleSelectedPokemons = (key, pokemon) => {
+    setSelectedPokemons(prevState => {
+      if (prevState[key]) {
+        const copyState = { ...prevState };
+        delete copyState[key];
+
+        return copyState;
+      }
+
+      return { ...prevState, [key]: pokemon };
+    });
+  };
+
+  const handleNewGameStart = () => {
+    setSelectedPokemons([]);
   };
 
   return (
-    <>
-      <h1>This is GamePage !!!</h1>;
-      <div className="flex">
-        {pokemons.map(({ name, id, type, values, img, isActive }) => (
-          <PokemonCard
-            key={id}
-            name={name}
-            id={id}
-            type={type}
-            values={values}
-            img={img}
-            isActive={isActive}
-            onCardClick={handleCardClick}
-          />
-        ))}
-      </div>
-    </>
+    <PokemonContext.Provider
+      value={{
+        pokemons: selectedPokemons,
+        onSelectedPokemons: handleSelectedPokemons,
+        onNewGameStart: handleNewGameStart,
+      }}
+    >
+      <Switch>
+        <Route path={`${match.path}/`} exact component={StartPage} />
+        <Route path={`${match.path}/board`} component={BoardPage} />
+        <Route path={`${match.path}/finish`} component={FinishPage} />
+      </Switch>
+    </PokemonContext.Provider>
   );
 };
 

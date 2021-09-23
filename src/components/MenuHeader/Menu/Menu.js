@@ -4,10 +4,10 @@ import styles from './Menu.module.css';
 import cn from 'classnames';
 
 const MENU = [
-  { title: 'HOME', to: '' },
-  { title: 'GAME', to: 'game' },
-  { title: 'ABOUT', to: 'about' },
-  { title: 'CONTACT', to: 'contact' },
+  { title: 'HOME', to: '/' },
+  { title: 'GAME', to: '/game' },
+  { title: 'ABOUT', to: '/about' },
+  { title: 'CONTACT', to: '/contact' },
 ];
 
 const Menu = ({ isOpen, onMenuLinkClick }) => {
