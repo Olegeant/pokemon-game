@@ -1,5 +1,4 @@
 import cn from 'classnames';
-import cardBackedPicture from '../../images/card-back-side.jpg';
 import styles from './PokemonCard.module.css';
 
 const PokemonCard = ({
@@ -13,6 +12,7 @@ const PokemonCard = ({
   onClickCard,
   minimize,
   className,
+  possession,
 }) => {
   return (
     <div
@@ -24,7 +24,7 @@ const PokemonCard = ({
     >
       <div className={styles.cardFront}>
         <div className={cn(styles.wrap, styles.front)}>
-          <div className={cn(styles.pokemon, styles[type])}>
+          <div className={cn(styles.pokemon, styles[type], styles[possession])}>
             <div className={styles.values}>
               <div className={cn(styles.count, styles.top)}>{values.top}</div>
               <div className={cn(styles.count, styles.right)}>{values.right}</div>

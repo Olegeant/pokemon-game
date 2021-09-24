@@ -8,8 +8,6 @@ import PokemonBg from '../../images/bg1.jpg';
 import LandscapeBg from '../../images/bg3.jpg';
 import POKEMONS from '../../data/pokemon.json';
 
-import styles from './style.module.css';
-
 function HomePage() {
   const history = useHistory();
 
