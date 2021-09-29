@@ -11,7 +11,7 @@ import MenuHeader from './components/MenuHeader/MenuHeader';
 import Footer from './components/Footer/Footer';
 
 import { FireBaseContext } from './context/firebaseContext';
-import Firebase from './service/firebase';
+import FirebaseClass from './service/firebase';
 
 import styles from './styles.module.css';
 
@@ -20,7 +20,7 @@ const App = () => {
   const isPadding = location.pathname === '/' || location.pathname === '/game/board';
 
   return (
-    <FireBaseContext.Provider value={new Firebase()}>
+    <FireBaseContext.Provider value={FirebaseClass}>
       <MenuHeader bgActive={!isPadding} />
 
       <div className={cn(styles.wrap, { [styles.isHomePage]: isPadding })}>

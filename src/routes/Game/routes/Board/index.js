@@ -1,7 +1,9 @@
 import { useState, useContext, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { PokemonContext } from '../../../../context/PokemonContext';
+import { getSelectedPokemons } from '../../../../redux/pokemons/pokemons';
 
 import PokemonCard from '../../../../components/PokemonCard/PokemonCard';
 import PlayerBoard from './component/PlayerBoard';
@@ -13,20 +15,21 @@ const counterWin = (board, player1, player2) => {
   let player2Count = player2.length;
 
   board.forEach(item => {
-    item.card.possession === 'blue' && player1Count++;
+    item?.card.possession === 'blue' && player1Count++;
 
-    item.card.possession === 'red' && player2Count++;
+    item?.card.possession === 'red' && player2Count++;
   });
 
   return [player1Count, player2Count];
 };
 
 const BoardPage = () => {
-  const { pokemons, savePlayer1Cards, savePlayer2Cards, saveWinner } = useContext(PokemonContext);
+  const selectedPokemons = useSelector(getSelectedPokemons);
+  const { savePlayer1Cards, savePlayer2Cards, saveWinner } = useContext(PokemonContext);
 
   const [board, setBoard] = useState([]);
   const [player1, setPlayer1] = useState(() => {
-    return Object.values(pokemons).map(item => ({ ...item, possession: 'blue' }));
+    return Object.values(selectedPokemons).map(item => ({ ...item, possession: 'blue' }));
   });
   const [player2, setPlayer2] = useState([]);
   const [choiceCard, setChoiceCard] = useState(null);
@@ -57,7 +60,7 @@ const BoardPage = () => {
     fetchDataOnGameStart();
   }, []);
 
-  if (Object.keys(pokemons).length === 0) history.replace('/game');
+  if (Object.keys(selectedPokemons).length === 0) history.replace('/game');
 
   useEffect(() => {
     if (steps === 9) {
