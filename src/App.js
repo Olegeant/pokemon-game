@@ -1,4 +1,4 @@
-import { Route, Switch, useRouteMatch, useLocation } from 'react-router-dom';
+import { Route, Switch, useLocation } from 'react-router-dom';
 import cn from 'classnames';
 
 import HomePage from './routes/Home';
