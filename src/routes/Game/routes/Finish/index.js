@@ -1,21 +1,24 @@
 import { useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 import { PokemonContext } from '../../../../context/PokemonContext';
 import { FireBaseContext } from '../../../../context/firebaseContext';
+import { getSelectedPokemons } from '../../../../redux/pokemons/pokemons';
 
 import EndGameBoard from './EndGameBoard';
 
 import styles from './style.module.css';
 
 const FinishPage = () => {
+  const selectedPokemons = useSelector(getSelectedPokemons);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const history = useHistory();
-  const { pokemons, onNewGameStart, player1Cards, player2Cards, savePlayer2Cards, winner } =
+  const { onNewGameStart, player1Cards, player2Cards, savePlayer2Cards, winner } =
     useContext(PokemonContext);
   const { addPokemon } = useContext(FireBaseContext);
 
-  if (Object.keys(pokemons).length === 0) history.replace('/');
+  if (Object.keys(selectedPokemons).length === 0) history.replace('/');
 
   useEffect(() => {
     return () => {
@@ -30,9 +33,10 @@ const FinishPage = () => {
   }, [selectedCardId]);
 
   const handleEndGame = () => {
-    if (selectedCardId) {
+    if (winner === 1) {
+      if (!selectedCardId) return;
+
       const bonusCard = player2Cards.find(item => item.id === selectedCardId);
-      if (!bonusCard) return;
 
       console.log(`I have got a new card!!!`);
       console.log(bonusCard);
@@ -67,11 +71,32 @@ const FinishPage = () => {
 
   return (
     <>
+      {winner === 1 && (
+        <h1 className={styles.header}>
+          You have one this round!
+          <br /> Please choose one card of your opponent as a reward.
+        </h1>
+      )}
+
+      {winner === 2 && (
+        <h1 className={styles.header}>
+          You have lost the game this time. <br />
+          Do not despair, try again!
+        </h1>
+      )}
+
+      {winner === 0 && (
+        <h1 className={styles.header}>
+          I can't believe, It's a DRAW! <br />
+          Try again to find out the stongest one!
+        </h1>
+      )}
+
       <div>
         <EndGameBoard cards={player1Cards} onClickCard={() => void 0} />
       </div>
       <div className={styles.buttonContainer}>
-        <button type="button" onClick={handleEndGame}>
+        <button type="button" onClick={handleEndGame} disabled={!selectedCardId && winner === 1}>
           END GAME
         </button>
       </div>
