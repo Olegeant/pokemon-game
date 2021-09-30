@@ -1,9 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import FirebaseClass from '../../service/firebase';
+import FirebaseClass from '../service/firebase';
 
 const initialState = {
-  isLoading: false,
   data: {},
+  isLoading: false,
   error: null,
 };
 

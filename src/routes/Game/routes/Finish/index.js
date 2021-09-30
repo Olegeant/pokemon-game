@@ -1,36 +1,52 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { PokemonContext } from '../../../../context/PokemonContext';
-import { FireBaseContext } from '../../../../context/firebaseContext';
-import { getSelectedPokemons } from '../../../../redux/pokemons/pokemons';
+import FirebaseClass from '../../../../service/firebase';
+import { getSelectedPokemons } from '../../../../redux/pokemons';
+import {
+  getPlayer1Cards,
+  getPlayer2Cards,
+  getWinner,
+  setPlayer1Cards,
+  setPlayer2Cards,
+  setWinner,
+} from '../../../../redux/game';
 
 import EndGameBoard from './EndGameBoard';
 
 import styles from './style.module.css';
 
 const FinishPage = () => {
-  const selectedPokemons = useSelector(getSelectedPokemons);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const history = useHistory();
-  const { onNewGameStart, player1Cards, player2Cards, savePlayer2Cards, winner } =
-    useContext(PokemonContext);
-  const { addPokemon } = useContext(FireBaseContext);
+  const dispatch = useDispatch();
+  const selectedPokemons = useSelector(getSelectedPokemons);
+  const player1Cards = useSelector(getPlayer1Cards);
+  const player2Cards = useSelector(getPlayer2Cards);
+  const winner = useSelector(getWinner);
 
   if (Object.keys(selectedPokemons).length === 0) history.replace('/');
 
   useEffect(() => {
     return () => {
-      onNewGameStart();
+      resetData();
     };
   }, []);
 
   useEffect(() => {
-    savePlayer2Cards(prevstate => {
-      return prevstate.map(item => ({ ...item, isSelected: item.id === selectedCardId }));
-    });
-  }, [selectedCardId]);
+    dispatch(
+      setPlayer2Cards(
+        player2Cards.map(item => ({ ...item, isSelected: item.id === selectedCardId })),
+      ),
+    );
+  }, [selectedCardId, player2Cards, dispatch]);
+
+  const resetData = () => {
+    dispatch(setPlayer1Cards([]));
+    dispatch(setPlayer2Cards([]));
+    dispatch(setWinner(null));
+  };
 
   const handleEndGame = () => {
     if (winner === 1) {
@@ -57,10 +73,10 @@ const FinishPage = () => {
         weight,
       };
 
-      addPokemon(newData);
+      FirebaseClass.addPokemon(newData);
     }
 
-    onNewGameStart();
+    resetData();
     history.push('/');
   };
 

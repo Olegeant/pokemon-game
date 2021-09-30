@@ -3,6 +3,7 @@ import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 
 import PokemonCard from '../../../../components/PokemonCard/PokemonCard';
+import Loader from '../../../../components/Loader/Loader';
 
 import {
   getPokemons,
@@ -10,7 +11,7 @@ import {
   getPokemonsAsync,
   selectedPokemonsLoading,
   selectPokemon,
-} from '../../../../redux/pokemons/pokemons';
+} from '../../../../redux/pokemons';
 
 import styles from './style.module.css';
 
@@ -36,13 +37,11 @@ const StartPage = () => {
   return (
     <>
       <h1>This is GamePage !!!</h1>
-
       <div className={styles.buttonWrap}>
         <button onClick={handleStartGameClick} disabled={Object.keys(selectedPokemons).length < 5}>
           Start Game
         </button>
       </div>
-
       <div className={styles.flex}>
         {Object.entries(pokemons).map(([key, { id, name, type, values, img, selected }]) => (
           <PokemonCard
@@ -61,6 +60,7 @@ const StartPage = () => {
           />
         ))}
       </div>
+      {isLoading && <Loader />}
     </>
   );
 };
