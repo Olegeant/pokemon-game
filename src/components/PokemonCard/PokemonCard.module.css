@@ -69,8 +69,9 @@
 }
 
 .pokemonCard:active .wrap.front::after,
-.pokemonCard:focus .wrap.front::after {
-  border-color: var(--rock);
+.pokemonCard:focus .wrap.front::after,
+.pokemonCard.selected .wrap.front::after {
+  border-color: #97b3e6;
 }
 
 .wrap {

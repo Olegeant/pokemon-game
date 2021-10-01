@@ -1,5 +1,6 @@
 import { Route, Switch, useLocation } from 'react-router-dom';
 import cn from 'classnames';
+import { NotificationContainer } from 'react-notifications';
 
 import HomePage from './routes/Home';
 import GamePage from './routes/Game';
@@ -10,7 +11,10 @@ import NotFound from './routes/NotFound';
 import MenuHeader from './components/MenuHeader/MenuHeader';
 import Footer from './components/Footer/Footer';
 
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+
 import styles from './styles.module.css';
+import 'react-notifications/lib/notifications.css';
 
 const App = () => {
   const location = useLocation();
@@ -26,22 +30,24 @@ const App = () => {
             <HomePage />
           </Route>
 
-          <Route path="/game">
+          <PrivateRoute path="/game">
             <GamePage />
-          </Route>
+          </PrivateRoute>
 
-          <Route path="/about">
+          <PrivateRoute path="/about">
             <AboutPage />
-          </Route>
+          </PrivateRoute>
 
-          <Route path="/contact">
+          <PrivateRoute path="/contact">
             <ContactPage />
-          </Route>
+          </PrivateRoute>
 
           <Route>
             <NotFound />
           </Route>
         </Switch>
+
+        <NotificationContainer />
       </div>
 
       <Footer />

@@ -17,6 +17,7 @@ class Firebase {
   constructor() {
     this.fire = firebase;
     this.database = this.fire.database();
+    this.apiKey = firebaseConfig.apiKey;
   }
 
   getPokemonSoket = cb => {
