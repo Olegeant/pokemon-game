@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { NotificationManager } from 'react-notifications';
 
 import Menu from './Menu/Menu';
@@ -7,10 +8,13 @@ import Modal from '../Modal/Modal';
 import LoginForm from '../LoginForm/LoginForm';
 
 import FirebaseClass from '../../service/firebase';
+import { getUserUpdateAsync } from '../../redux/user';
 
 const MenuHeader = ({ bgActive }) => {
   const [isOpen, setIsOpen] = useState(null);
   const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const dispatch = useDispatch();
 
   const closeMenu = () => {
     setIsOpen(false);
@@ -60,8 +64,26 @@ const MenuHeader = ({ bgActive }) => {
     if (response.hasOwnProperty('error')) {
       NotificationManager.error(response.error.message, 'Error!');
     } else {
+      if (mode === 'signUp') {
+        const pokemonsStart = await fetch(
+          'https://reactmarathon-api.herokuapp.com/api/pokemons/starter',
+        ).then(res => res.json());
+
+        for (const item of pokemonsStart.data) {
+          await fetch(
+            `https://pokemon-game-23b5e-default-rtdb.europe-west1.firebasedatabase.app/${response.localId}/pokemons.json/?auth=${response.idToken}`,
+            {
+              method: 'POST',
+              body: JSON.stringify(item),
+            },
+          );
+        }
+      }
+
       localStorage.setItem('idToken', response.idToken);
       NotificationManager.success('User registered', 'Success!');
+      dispatch(getUserUpdateAsync());
+      handleClickLogin();
     }
   };
 
