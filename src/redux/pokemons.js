@@ -1,17 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import FirebaseClass from '../../service/firebase';
+import FirebaseClass from '../service/firebase';
+import { selectLocalId } from './user';
 
 const initialState = {
-  isLoading: false,
   data: {},
+  isLoading: false,
   error: null,
 };
 
 export const getPokemonsAsync = createAsyncThunk(
   'pokemons/getPokemons',
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
-      const data = await FirebaseClass.getPokemonsOnce();
+      const localId = selectLocalId(getState());
+
+      const data = await fetch(
+        `https://pokemon-game-23b5e-default-rtdb.europe-west1.firebasedatabase.app/${localId}/pokemons.json`,
+      ).then(res => res.json());
       return data;
     } catch (error) {
       rejectWithValue(error);

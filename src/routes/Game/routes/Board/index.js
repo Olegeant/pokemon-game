@@ -1,9 +1,9 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { PokemonContext } from '../../../../context/PokemonContext';
-import { getSelectedPokemons } from '../../../../redux/pokemons/pokemons';
+import { getSelectedPokemons } from '../../../../redux/pokemons';
+import { setPlayer1Cards, setPlayer2Cards, setWinner } from '../../../../redux/game';
 
 import PokemonCard from '../../../../components/PokemonCard/PokemonCard';
 import PlayerBoard from './component/PlayerBoard';
@@ -15,9 +15,9 @@ const counterWin = (board, player1, player2) => {
   let player2Count = player2.length;
 
   board.forEach(item => {
-    item?.card.possession === 'blue' && player1Count++;
+    item?.card?.possession === 'blue' && player1Count++;
 
-    item?.card.possession === 'red' && player2Count++;
+    item?.card?.possession === 'red' && player2Count++;
   });
 
   return [player1Count, player2Count];
@@ -25,7 +25,7 @@ const counterWin = (board, player1, player2) => {
 
 const BoardPage = () => {
   const selectedPokemons = useSelector(getSelectedPokemons);
-  const { savePlayer1Cards, savePlayer2Cards, saveWinner } = useContext(PokemonContext);
+  const dispatch = useDispatch();
 
   const [board, setBoard] = useState([]);
   const [player1, setPlayer1] = useState(() => {
@@ -53,12 +53,12 @@ const BoardPage = () => {
 
       setPlayer2(player2Cards);
 
-      savePlayer1Cards(player1);
-      savePlayer2Cards(player2Cards);
+      dispatch(setPlayer1Cards(player1));
+      dispatch(setPlayer2Cards(player2Cards));
     }
 
     fetchDataOnGameStart();
-  }, []);
+  }, [dispatch]);
 
   if (Object.keys(selectedPokemons).length === 0) history.replace('/game');
 
@@ -68,13 +68,13 @@ const BoardPage = () => {
 
       if (count1 > count2) {
         alert('WIN');
-        saveWinner(1);
+        dispatch(setWinner(1));
       } else if (count1 < count2) {
         alert('lose');
-        saveWinner(2);
+        dispatch(setWinner(2));
       } else {
         alert('DRAW');
-        saveWinner(0);
+        dispatch(setWinner(0));
       }
 
       history.push(match.path.replace(/\/[^/]+$/, '/finish'));
