@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import FirebaseClass from '../../../../service/firebase';
-
 import { getSelectedPokemons } from '../../../../redux/pokemons';
 import { selectLocalId } from '../../../../redux/user';
 import {
