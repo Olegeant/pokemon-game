@@ -6,16 +6,16 @@ import PokemonCard from '../../../../../../components/PokemonCard/PokemonCard';
 import styles from './style.module.css';
 
 const PlayerBoard = ({ player, cards, onClickCard }) => {
-  const [selectedCardId, setSelectedCardId] = useState(null);
+  // const [selectedCardId, setSelectedCardId] = useState(null);
 
   return (
     <>
       {cards.map(item => (
         <div
           key={item.id}
-          className={cn(styles.cardBoard, { [styles.selected]: selectedCardId === item.id })}
+          className={cn(styles.cardBoard, { [styles.selected]: item.active })}
           onClick={() => {
-            setSelectedCardId(item.id);
+            // onClickCard && setSelectedCardId(item.id);
             onClickCard && onClickCard({ player, ...item });
           }}
         >

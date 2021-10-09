@@ -1,0 +1,31 @@
+.arrow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  translatey: -50%;
+  margin: -60px 0 0 -60px;
+  width: 0;
+  height: 0;
+  /* Triangle Borders */
+  border-top: 60px solid transparent;
+  border-bottom: 60px solid transparent;
+  border-left: 100px solid yellow;
+  animation: spin 1s linear infinite;
+}
+
+.rightSide {
+  animation: none;
+  transform: rotateY(0deg);
+}
+
+.leftSide {
+  animation: none;
+  transform: rotateY(180deg);
+}
+
+@keyframes spin {
+  100% {
+    -webkit-transform: rotateY(360deg);
+    transform: rotateY(360deg);
+  }
+}

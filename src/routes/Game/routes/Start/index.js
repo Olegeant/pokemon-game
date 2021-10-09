@@ -13,6 +13,8 @@ import {
   selectPokemon,
 } from '../../../../redux/pokemons';
 
+import { setPlayer1Cards, setPlayer2Cards, setWinner } from '../../../../redux/game';
+
 import styles from './style.module.css';
 
 const StartPage = () => {
@@ -24,6 +26,9 @@ const StartPage = () => {
 
   useEffect(() => {
     dispatch(getPokemonsAsync());
+    dispatch(setPlayer1Cards([]));
+    dispatch(setPlayer2Cards([]));
+    dispatch(setWinner(null));
   }, [dispatch]);
 
   const handleChangeSelected = key => {
@@ -37,11 +42,13 @@ const StartPage = () => {
   return (
     <>
       <h1>This is GamePage !!!</h1>
+
       <div className={styles.buttonWrap}>
         <button onClick={handleStartGameClick} disabled={Object.keys(selectedPokemons).length < 5}>
           Start Game
         </button>
       </div>
+
       <div className={styles.flex}>
         {Object.entries(pokemons).map(([key, { id, name, type, values, img, selected }]) => (
           <PokemonCard
@@ -60,6 +67,7 @@ const StartPage = () => {
           />
         ))}
       </div>
+
       {isLoading && <Loader />}
     </>
   );
